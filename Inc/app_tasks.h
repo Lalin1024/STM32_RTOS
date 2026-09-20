@@ -13,12 +13,14 @@
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "event_groups.h"
 
 extern SemaphoreHandle_t uart_mutex;
+extern EventGroupHandle_t	button_events;
 
 void task1(void *para);
 void task2(void *para);
-//void task3(void *para);
-
+void ButtonTask(void *para);
+void led_task(void* para);
 
 #endif /* APP_TASKS_H_ */
