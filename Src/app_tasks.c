@@ -33,17 +33,6 @@ void task2(void *para)
 	}
 }
 
-void ButtonTask(void *para)
-{
-	while(1)
-	{
-		if(GPIOC->IDR & (1U<<13))
-		{
-		xTaskNotifyGive(led_handle);
-	}
-		vTaskDelay(pdMS_TO_TICKS(500));
-}
-}
 
 void led_task(void* para)
 {
