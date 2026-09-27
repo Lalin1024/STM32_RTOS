@@ -40,6 +40,8 @@
 #define xPortPendSVHandler   PendSV_Handler
 #define xPortSysTickHandler  SysTick_Handler
 
+#define configUSE_TASK_NOTIFICATIONS 1
+
 #define configUSE_MUTEXES	1
 
 #endif /* FREERTOSCONFIG_H_ */

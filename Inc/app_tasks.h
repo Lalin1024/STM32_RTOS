@@ -17,6 +17,7 @@
 
 extern SemaphoreHandle_t uart_mutex;
 extern EventGroupHandle_t	button_events;
+extern TaskHandle_t led_handle;
 
 void task1(void *para);
 void task2(void *para);

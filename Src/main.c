@@ -13,6 +13,8 @@ SemaphoreHandle_t uart_mutex;//mutex handle
 
 EventGroupHandle_t	button_events;
 
+TaskHandle_t led_handle;
+
 int main()
 {
 	SetClock_16MHz();
@@ -31,10 +33,9 @@ int main()
 	xTaskCreate(task1,"Task1",256,msg1,3,NULL);
 	xTaskCreate(task2,"Task2",256,msg2,4,NULL);
 	xTaskCreate(ButtonTask,"ButtonTask",256,NULL,2,NULL);
-	xTaskCreate(led_task,"LEDTask",256,NULL,1,NULL);
+	xTaskCreate(led_task,"LEDTask",256,NULL,1,&led_handle); //Handle created
 	vTaskStartScheduler();
 	while(1){}
 
 }
-
 
