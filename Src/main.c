@@ -22,8 +22,11 @@ int main()
 
 	RCC->AHB2ENR|=(GPIOB_EN|GPIOC_EN);
 	GPIOB->MODER&=~(3U<<26);
-	GPIOC->MODER&=~(3U<<26);
+	GPIOC->MODER&=~((3U<<26)|(3U<<16));
 	GPIOB->MODER|=(1U<<26);
+
+	GPIOC->PUPDR &= ~((3U << 26) | (3U << 16));
+	GPIOC->PUPDR |=  ((1U << 27) | (1U << 17));
 
 	uart_mutex=xSemaphoreCreateMutex();//Creating Mutex
 
@@ -33,7 +36,7 @@ int main()
 	xTaskCreate(task1,"Task1",256,msg1,2,NULL);
 	xTaskCreate(task2,"Task2",256,msg2,2,NULL);
 	xTaskCreate(button_task,"ButtonTask",256,NULL,4,NULL);
-	xTaskCreate(led_task,"LEDTask",256,NULL,3,&led_handle); //Handle created
+	xTaskCreate(led_task,"LEDTask",256,NULL,4,&led_handle); //Handle created
 	vTaskStartScheduler();
 	while(1){}
 

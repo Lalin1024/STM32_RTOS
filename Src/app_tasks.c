@@ -4,7 +4,7 @@
 
 #define BUTTON1	(1U<<0)
 #define BUTTON2	(1U<<1)
-
+#define BOTH	(BUTTON1|BUTTON2)
 
 
 void task1(void *para)
@@ -39,7 +39,11 @@ void button_task(void *para)
 		{
 			if(GPIOC->IDR & (1U<<13))
 			{
-			xTaskNotify(led_handle,0,eNoAction);
+			xTaskNotify(led_handle,BUTTON1,eSetBits);
+		}
+			else if(GPIOC->IDR & (1U<<8))
+			{
+			xTaskNotify(led_handle,BUTTON2,eSetBits);
 		}
 			vTaskDelay(pdMS_TO_TICKS(500));
 	}
@@ -48,12 +52,22 @@ void button_task(void *para)
 
 void led_task(void* para)
 {
+	uint32_t notify;
+	uint32_t events=0;
+
 	while(1)
 	{
-		xTaskNotifyWait(0, 0, NULL, portMAX_DELAY);//Waiting till it get notified
+		xTaskNotifyWait(0, UINT32_MAX, &notify, portMAX_DELAY);//Waiting till it get notified
+		events|=notify;
+
+		if(events==BOTH)
+		{
 		GPIOB->BSRR|=(1U<<13);
 		vTaskDelay(pdMS_TO_TICKS(1000));
 		GPIOB->BSRR|=(1U<<29);
-		vTaskDelay(pdMS_TO_TICKS(1000));
+
+		events&=~BOTH;
+
 	}
+}
 }
