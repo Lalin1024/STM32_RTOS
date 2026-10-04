@@ -19,7 +19,6 @@ int main()
 {
 	SetClock_16MHz();
 	uart_init();
-	exti_13();
 
 	RCC->AHB2ENR|=(GPIOB_EN|GPIOC_EN);
 	GPIOB->MODER&=~(3U<<26);
@@ -32,21 +31,11 @@ int main()
 
 
 	xTaskCreate(task1,"Task1",256,msg1,2,NULL);
-	xTaskCreate(task2,"Task2",256,msg2,3,NULL);
-	xTaskCreate(led_task,"LEDTask",256,NULL,4,&led_handle); //Handle created
+	xTaskCreate(task2,"Task2",256,msg2,2,NULL);
+	xTaskCreate(button_task,"ButtonTask",256,NULL,4,NULL);
+	xTaskCreate(led_task,"LEDTask",256,NULL,3,&led_handle); //Handle created
 	vTaskStartScheduler();
 	while(1){}
 
 }
 
-void EXTI15_10_IRQHandler(void)
-{
-	if(EXTI->PR1 & (1U<<13))
-	{
-		EXTI->PR1|=(1U<<13);
-		BaseType_t flag=pdFALSE;
-		vTaskNotifyGiveFromISR(led_handle,&flag);//API to notify the task
-		portYIELD_FROM_ISR(flag);
-
-	}
-}

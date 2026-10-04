@@ -21,7 +21,7 @@ extern TaskHandle_t led_handle;
 
 void task1(void *para);
 void task2(void *para);
-void ButtonTask(void *para);
+void button_task(void *para);
 void led_task(void* para);
 
 #endif /* APP_TASKS_H_ */

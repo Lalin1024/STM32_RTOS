@@ -33,12 +33,24 @@ void task2(void *para)
 	}
 }
 
+void button_task(void *para)
+{
+	while(1)
+		{
+			if(GPIOC->IDR & (1U<<13))
+			{
+			xTaskNotify(led_handle,0,eNoAction);
+		}
+			vTaskDelay(pdMS_TO_TICKS(500));
+	}
+}
+
 
 void led_task(void* para)
 {
 	while(1)
 	{
-		ulTaskNotifyTake(pdTRUE,portMAX_DELAY);//Waiting till it get notified
+		xTaskNotifyWait(0, 0, NULL, portMAX_DELAY);//Waiting till it get notified
 		GPIOB->BSRR|=(1U<<13);
 		vTaskDelay(pdMS_TO_TICKS(1000));
 		GPIOB->BSRR|=(1U<<29);
